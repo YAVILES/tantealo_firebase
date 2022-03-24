@@ -12,14 +12,16 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from datetime import timedelta
 import environ
-from firebase_admin import initialize_app
 
 from pathlib import Path
+import firebase_admin
+from firebase_admin import credentials
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(BASE_DIR, 'tantealo-1de99-firebase-adminsdk.json')
+cred = credentials.Certificate("firebase-admin.json")
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(BASE_DIR, 'firebase-admin.json')
 
 env = environ.Env(
     # set casting, default value
@@ -214,7 +216,7 @@ EMAIL_HOST_PASSWORD = env('EMAIL_PASSWORD')
 EMAIL_USE_TLS = True
 
 
-FIREBASE_APP = initialize_app()
+FIREBASE_APP = firebase_admin.initialize_app(cred)
 FCM_DJANGO_SETTINGS = {
     "APP_VERBOSE_NAME": "tantealo",
     # true if you want to have only one active device per registered user at a time
